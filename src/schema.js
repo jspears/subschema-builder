@@ -10,11 +10,11 @@ var schema = {
     type: {
         type: 'Select',
         options: loader.listTypes().map(nameToLabelVal),
-        help: 'The type of the field'
+        help: 'The type of the field defaults (Text)'
     },
     placeholder: {
         type: 'Text',
-        help: 'Placeholder text'
+        help: 'Placeholder text (optional)'
     },
     validators: {
         type: 'List',
@@ -25,7 +25,8 @@ var schema = {
         itemType: {
             type: 'Select',
             options: loader.listValidators().map(nameToLabelVal)
-        }
+        },
+        template:'EditorTemplateNested'
     },
 
     help: {
@@ -57,7 +58,8 @@ var schema = {
                 canAdd: true,
                 options: function () {
                     return Object.keys(this.props.valueManager.path('schema'))
-                }
+                },
+                template:'EditorTemplateNested'
             }
         },
         fields: ['legend', 'fields']
@@ -82,7 +84,8 @@ module.exports = {
 
             valueType: {
                 type: 'Object',
-                subSchema: schema
+                subSchema: schema,
+                fields: ['type', 'options', 'validators', 'help', 'filedClass', 'placeholder', 'template']
             }
         }
     },

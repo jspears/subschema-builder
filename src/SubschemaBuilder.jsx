@@ -23,6 +23,8 @@ var ListOptions = {
     type: 'Hidden'
 
 };
+loader.addTemplate('EditorTemplateNested', require('./EditorTemplateNested.jsx'));
+
 var SubschemaBuilder = React.createClass({
     getInitialState(){
         return {
