@@ -4,26 +4,48 @@ var loader = Subschema.loader;
 var Form = Subschema.Form;
 var schema = require('./schema');
 var util = Subschema.util;
-var ListOptions = {
-    type: 'List',
-    canEdit: true,
-    canDelete: true,
-    canReorder: true,
-    canAdd: true,
-    labelKey: 'label',
-    itemType: {
-        type: 'Object',
-        subSchema: {
-            label: 'Text',
-            val: 'Text'
+var extend = util.extend;
+var virginValueType = extend({}, schema.schema.schema.valueType.subSchema);
+var virginFields = schema.schema.schema.valueType.fields.concat();
+var CreateItemMixin = require('subschema/src/types/CreateItemMixin');
+var BasicFieldMixin = require('subschema/src/BasicFieldMixin');
+var {Button,ModalTrigger,Modal} = require('react-bootstrap');
+var SelectOptions = {
+    options: {
+        type: 'List',
+        help: 'A list of possible values',
+        canEdit: true,
+        canDelete: true,
+        canReorder: true,
+        canAdd: true,
+        labelKey: 'label',
+        itemType: {
+            type: 'Object',
+            subSchema: {
+                label: 'Text',
+                val: 'Text'
+            }
         }
     }
 
-}, HiddenOption = {
-    type: 'Hidden'
-
+}, CollectionOptions = {
+    canEdit: {
+        type: 'Checkbox',
+        help: 'Allow editing'
+    },
+    canDelete: {
+        type: 'Checkbox',
+        help: 'Allow delete'
+    },
+    canReorder: {
+        type: 'Checkbox',
+        help: 'Allow reorder'
+    },
+    canAdd: {
+        type: 'Checkbox',
+        help: 'Allow adding items'
+    }
 };
-loader.addTemplate('EditorTemplateNested', require('./EditorTemplateNested.jsx'));
 
 var SubschemaBuilder = React.createClass({
     getInitialState(){
@@ -32,38 +54,122 @@ var SubschemaBuilder = React.createClass({
         }
     },
     swapSchema(swapped){
-        this.state.schema.schema.schema
-        var subSchema = this.state.schema.schema.schema.valueType.subSchema;
-        subSchema.options = swapped;
-        this.setState({schema: util.extend({}, this.state.schema)});
+        var state = {schema: this.state.schema}, valueType = state.schema.schema.schema.valueType
+        if (!swapped) {
+            valueType.subSchema = virginValueType;
+            valueType.fields = virginFields;
+        } else {
+            valueType.subSchema = extend({}, virginValueType, swapped);
+            valueType.fields = virginFields.slice(0, 1).concat(Object.keys(swapped), virginFields.slice(1));
+        }
+        this.setState(state);
     },
     componentWillMount(){
-        this.props.valueManager.addCreateValueListener(null, this.register, this);
+        this.props.valueManager.addCreateValueListener(this.props.path, this.register, this);
     },
     componentWillUnmount(){
-        this.props.valueManager.removeCreateValueListener(null, this.register);
-        loader.removeLoader(this._loader);
+        this.props.valueManager.removeCreateValueListener(this.props.path, this.register);
     },
-    register: function (newVM) {
-        //  this.swapSchema()
-        newVM.addListener('value.type', this.handleChange, this);
+    register: function (newVM, path) {
+        console.log('register', path);
+        newVM.addListener('value.type', this.handleChange, this, true);
+        //    return false;
     },
-    handleChange(value, oldValue, path){
-        path = path || '';
+    updateConfig(value){
         switch (value) {
+            case 'Object':
+            {
+                return {
+                    subSchema: {
+                        type: 'SubschemaBuilder'
+                    }
+                };
+            }
+            case 'Mixed':
+            {
+                return util.extend({
+                    valueType: {
+                        type: 'SubschemaBuilder'
+                    },
+                    keyType: {
+                        type: 'Select',
+                        options: ['Text', 'Select']
+                    }
+                }, CollectionOptions);
+
+            }
             case 'List':
             {
-                this.swapSchema(ListOptions);
-                break;
+
+                return extend({
+                    itemType: {
+                        type: 'SubschemaBuilder'
+                    }
+                }, CollectionOptions);
+
             }
-            default:
-                this.swapSchema();
+            case 'Radio' :
+            case 'Checkboxes':
+            case 'Select' :
+            {
+
+                return SelectOptions;
+            }
         }
     },
-    render(){
-        return <Form schema={this.state.schema} valueManager={this.props.valueManager}/>
+    handleChange(value){
+        console.log('handleChange', this.props.path, value);
+        this.swapSchema(this.updateConfig(value));
+    },
+    render()
+    {
+
+        return (<div className='subschema-builder'>
+            <Form schema={this.state.schema} valueManager={this.props.valueManager}/>
+        </div>);
     }
 });
+
+var SubschemaBuilderModal = React.createClass({
+
+    handleAdd(e){
+        e && e.preventDefault();
+        this.updateValue(this.valueManager.path('schema'));
+        this.props.onRequestHide(e);
+    },
+    componentWillMount(){
+        this.valueManager = Subschema.ValueManager(this.props.valueManager.getValue());
+    },
+    updateValue(val){
+        this.props.valueManager.update(this.props.path, val);
+    },
+    render(){
+        var {onRequestHide, ...props} = this.props;
+        return <Modal bsStyle='primary' title='Subschema Schema' animation={true}
+                      onRequestHide={this.props.onRequestHide}>
+            <div className='modal-body clearfix'>
+                <div className='flex-container'>
+                    <SubschemaBuilder {...props} valueManager={this.valueManager} className={'flex-container'}/>
+                </div>
+            </div>
+            <div className='modal-footer'>
+                <Button onClick={onRequestHide}>Close</Button>
+                <Button onClick={this.handleAdd}>Add</Button>
+            </div>
+        </Modal>
+    }
+});
+var SubschemaBuilderModalTrigger = React.createClass({
+
+    render () {
+        return <ModalTrigger modal={<SubschemaBuilderModal {...this.props}/>}>
+            <Button>Edit Schema</Button>
+        </ModalTrigger>
+    }
+
+})
+loader.addTemplate('EditorTemplateNested', require('./EditorTemplateNested.jsx'));
+loader.addType('SubschemaBuilder', SubschemaBuilderModalTrigger);
 
 module.exports = SubschemaBuilder;
 

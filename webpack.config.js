@@ -13,7 +13,13 @@ module.exports = {
     entry: {
         app: './public/app.jsx'
     },
-
+    devServer: {
+        contentBase: "./build",
+        info: false, //  --no-info option
+        hot: true,
+        inline: true,
+	port:8083
+    },
     output: {
         path: '.build/',
         filename: '[name].js',

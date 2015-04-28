@@ -17,6 +17,7 @@ var schema = {
         help: 'Placeholder text (optional)'
     },
     validators: {
+        help: 'Validators for this field',
         type: 'List',
         canEdit: true,
         canDelete: true,
@@ -25,8 +26,7 @@ var schema = {
         itemType: {
             type: 'Select',
             options: loader.listValidators().map(nameToLabelVal)
-        },
-        template:'EditorTemplateNested'
+        }
     },
 
     help: {
@@ -59,7 +59,7 @@ var schema = {
                 options: function () {
                     return Object.keys(this.props.valueManager.path('schema'))
                 },
-                template:'EditorTemplateNested'
+                template: 'EditorTemplateNested'
             }
         },
         fields: ['legend', 'fields']
@@ -79,9 +79,10 @@ module.exports = {
             canReorder: true,
             canAdd: true,
             keyType: {
-                type: 'Text'
+                type: 'Text',
+                validators: ['required']
             },
-
+            labelKey:'help',
             valueType: {
                 type: 'Object',
                 subSchema: schema,

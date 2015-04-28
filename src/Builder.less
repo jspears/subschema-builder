@@ -1,0 +1,32 @@
+.subschema-builder {
+  .list-group-item .item-value {
+    float: left !important;
+  }
+
+  .list-group-item {
+    .clearfix();
+  }
+  .clearfix() {
+    &:before,
+    &:after {
+      content: " ";
+      display: table;
+    }
+    &:after {
+      clear: both;
+    }
+  }
+  [for="schema"] {
+    display: none;
+  }
+  [for="schema"] + .col-sm-10 {
+    width: 100%;
+  }
+  .form-group .col-sm-10 {
+    width: 100%;
+    display: block;
+  }
+}
+.tab-container {
+  padding:10px;
+}

@@ -1,30 +1,27 @@
+"use strict";
 var React = require('react');
-var SchemaBuilder = require('../src/SubschemaBuilder.jsx');
-var vm = require('subschema').ValueManager();
-var App = React.createClass({
-    getInitialState(){
-        return {
-            data: {}
-        };
-    },
-    componentWillMount(){
-        vm.addListener(null, this.update, this);
-    },
-    componentWillUnmount(){
-        vm.removeListener(null, this.update);
-    },
-    update(data){
-        this.setState({data});
-    },
-    render(){
-        return <div>
-            <h3>Schema Builder</h3>
-            <SchemaBuilder valueManager={vm}/>
-            <pre>
-                {JSON.stringify(this.state.data, null, 2)}
-             </pre>
-        </div>
-    }
-});
+var ValueManager = require('subschema').ValueManager;
+var App = require('../src/Builder.jsx');
+//Make testing easier.
+var schema = {
+    "schema": {
 
-React.render(<App/>, document.getElementById('content'));
+        "object": {
+            "type": "Object",
+            help: 'Shows an object',
+            "subSchema": {
+                name: {
+                    type: 'Text'
+
+                }
+            }
+        },
+        "checkbox": {
+            "type": "Checkbox",
+            "help": "shows a checkbox"
+        }
+    }
+
+};
+
+React.render(<App valueManager={ValueManager(schema)}/>, document.getElementById('content'));
