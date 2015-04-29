@@ -108,6 +108,15 @@ var SubschemaBuilder = React.createClass({
                 }, CollectionOptions);
 
             }
+            case 'Text':
+            case 'TextArea':
+            {
+                return {
+                    placeholder: {
+                        type: "Text"
+                    }
+                }
+            }
             case 'Radio' :
             case 'Checkboxes':
             case 'Select' :
@@ -138,7 +147,9 @@ var SubschemaBuilderModal = React.createClass({
         this.props.onRequestHide(e);
     },
     componentWillMount(){
-        this.valueManager = Subschema.ValueManager(this.props.valueManager.getValue());
+        var value = this.props.valueManager.getValue()
+        value = value && value.subSchema;
+        this.valueManager = Subschema.ValueManager({schema: value});
     },
     updateValue(val){
         this.props.valueManager.update(this.props.path, val);
@@ -170,6 +181,8 @@ var SubschemaBuilderModalTrigger = React.createClass({
 })
 loader.addTemplate('EditorTemplateNested', require('./EditorTemplateNested.jsx'));
 loader.addType('SubschemaBuilder', SubschemaBuilderModalTrigger);
+loader.addType('OrType', require('./OrType.jsx'));
+loader.addTemplate('OrTypeTemplate', require('./template/OrTypeTemplate.jsx'));
 
 module.exports = SubschemaBuilder;
 

@@ -23,5 +23,14 @@ var schema = {
     }
 
 };
-
-React.render(<App valueManager={ValueManager(schema)}/>, document.getElementById('content'));
+var vm = ValueManager(schema);
+function clear(){
+    vm.setValue({});
+}
+React.render(
+    <App valueManager={vm}>
+        <div>
+            <button className="btn" onClick={clear}>clear</button>
+        </div>
+    </App>
+    , document.getElementById('content'));

@@ -12,12 +12,8 @@ var schema = {
         options: loader.listTypes().map(nameToLabelVal),
         help: 'The type of the field defaults (Text)'
     },
-    placeholder: {
-        type: 'Text',
-        help: 'Placeholder text (optional)'
-    },
     validators: {
-        help: 'Validators for this field',
+        help: 'Validators for this field (optional)',
         type: 'List',
         canEdit: true,
         canDelete: true,
@@ -86,7 +82,7 @@ module.exports = {
             valueType: {
                 type: 'Object',
                 subSchema: schema,
-                fields: ['type', 'options', 'validators', 'help', 'filedClass', 'placeholder', 'template']
+                fields: ['type', 'options', 'validators', 'help', 'filedClass', 'template']
             }
         }
     },

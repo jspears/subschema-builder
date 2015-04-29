@@ -1,43 +1,33 @@
 "use strict";
 
 var React = require('react');
-var {Nav,NavItem} = require('react-bootstrap');
+var {TabbedArea,TabPane} = require('react-bootstrap');
 var SimpleTabs = React.createClass({
     getDefaultProps(){
         return {
-            activeKey: 0,
-            bsStyle: 'tabs',
-            justified: true,
-            tabs: [],
-            tabContainerClass: 'tab-container'
+            tabs: []
         }
-
     },
     getInitialState(){
         return {
-            activeKey: this.props.activeKey
+            activeKey: this.props.activeKey || 0
         }
     },
     handleSelect(activeKey){
         this.setState({activeKey});
     },
+    renderTab(t, i){
+        var {tabs, ...props} = this.props;
 
+        var View = t.view;
+        return <TabPane eventKey={i} tab={t.title} key={'tab-'+i}>
+            <View  {...props} {...t.props}/>
+        </TabPane>
+    },
     render(){
-        var {valueManager, tabs, ...props} = this.props;
-        var tab = tabs[this.state.activeKey];
-        var TabView = tab.view;
-
-        return <div>
-            <Nav  {...props} activeKey={this.state.activeKey} onSelect={this.handleSelect}>
-                {tabs.map((t, i)=>(
-                    <NavItem eventKey={i} {...t.props}>{t.title}</NavItem>
-                ))}
-            </Nav>
-
-            <div className={this.props.tabContainerClass}>
-                <TabView {...props} {...tab.props}/>
-            </div>
-        </div>
+        return <TabbedArea defaultActiveKey={this.state.activeKey}>
+            {this.props.tabs.map(this.renderTab, this)}
+        </TabbedArea>
     }
 });
 

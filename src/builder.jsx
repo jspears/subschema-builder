@@ -14,10 +14,12 @@ var Builder = React.createClass({
     },
 
     render(){
+        var {children, ...props} = this.props
         return <div>
             <h3>Schema Builder</h3>
-            <SchemaBuilder {...this.props}/>
-            <SubschemaTabs {...this.props}/>
+            {children}
+            <SchemaBuilder {...props}/>
+            <SubschemaTabs {...props}/>
         </div>
     }
 });
