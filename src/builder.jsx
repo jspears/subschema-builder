@@ -3,7 +3,7 @@ var SchemaBuilder = require('../src/SubschemaBuilder.jsx');
 var ValueManager = require('subschema').ValueManager;
 var SubschemaTabs = require('../src/SubschemaTabs.jsx');
 
-require('./Builder.less');
+//require('./Builder.less');
 
 var Builder = React.createClass({
     getDefaultProps(){
@@ -19,7 +19,7 @@ var Builder = React.createClass({
             <h3>Schema Builder</h3>
             {children}
             <SchemaBuilder {...props}/>
-            <SubschemaTabs {...props}/>
+
         </div>
     }
 });

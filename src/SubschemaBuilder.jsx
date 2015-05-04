@@ -60,7 +60,7 @@ var SubschemaBuilder = React.createClass({
             valueType.fields = virginFields;
         } else {
             valueType.subSchema = extend({}, virginValueType, swapped);
-            valueType.fields = virginFields.slice(0, 1).concat(Object.keys(swapped), virginFields.slice(1));
+            valueType.fields = virginFields.slice(0, 2).concat(Object.keys(swapped), virginFields.slice(2));
         }
         this.setState(state);
     },

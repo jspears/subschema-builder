@@ -24,7 +24,10 @@ var schema = {
             options: loader.listValidators().map(nameToLabelVal)
         }
     },
-
+    title: {
+        type: 'Text',
+        help: 'The title/label to display for the field (optional)'
+    },
     help: {
         type: 'Text',
         help: 'Help text (optional)'
@@ -78,11 +81,11 @@ module.exports = {
                 type: 'Text',
                 validators: ['required']
             },
-            labelKey:'help',
+            labelKey: 'help',
             valueType: {
                 type: 'Object',
                 subSchema: schema,
-                fields: ['type', 'options', 'validators', 'help', 'filedClass', 'template']
+                fields: ['type', 'title',  'validators', 'help', 'fieldClass', 'template']
             }
         }
     },

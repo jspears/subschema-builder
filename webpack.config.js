@@ -5,26 +5,28 @@ var webpack = require('webpack');
 var AUTOPREFIXER_LOADER = 'autoprefixer-loader?{browsers:[' +
     '"Android 2.3", "Android >= 4", "Chrome >= 20", "Firefox >= 24", ' +
     '"Explorer >= 8", "iOS >= 6", "Opera >= 12", "Safari >= 6"]}';
-
+var port = 8083;
 module.exports = {
 
-    devtool: 'source-map',
+    devtool: 'eval',
 
-    entry: {
-        app: './public/app.jsx'
-    },
+
+    entry: [
+        'webpack-dev-server/client?http://localhost:' + port,
+        'webpack/hot/only-dev-server',
+        path.join(__dirname, 'public/app.jsx')
+    ],
     devServer: {
-        contentBase: "./build",
-        info: false, //  --no-info option
+        port: port,
+        contentBase: path.join(__dirname, 'public'),
         hot: true,
-        inline: true,
-	port:8083
+        inline: true
     },
     output: {
-        path: '.build/',
-        filename: '[name].js',
-        chunkFilename: '[id].chunk.js',
-        publicPath: '/'
+        path: path.join(__dirname, '.build'),
+        filename: 'bundle.js',
+        publicPath: 'http://localhost:' + port + '/build/'
+
     },
     stats: {
         colors: true,
@@ -32,7 +34,20 @@ module.exports = {
     },
     module: {
         loaders: [
-            {test: /\.js(x)?$/, loader: 'babel-loader?stage=0'},
+            {
+                test: /\.js(x)?$/,
+                loaders: ['react-hot', 'babel?stage=0'],
+                includes:[
+                    path.join(__dirname, 'public'),
+                    path.join(__dirname, 'src')
+                ],
+                exclude:/node_modules/
+            },
+            {
+                test:/\.js(x)?$/,
+                loaders:['babel?stage=0'],
+                exclude: /node_modules\/(?!subschema|react-bootstrap|react-router)/
+            },
             {test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000'},
             {test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/font-woff"},
             {test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/octet-stream"},
@@ -52,16 +67,15 @@ module.exports = {
     },
 
     resolve: {
+        extensions: ['', '.js', '.jsx', '.less']/*,
         alias: {
-            'react': path.join(__dirname, '/node_modules/react')
-        }
+            react: path.join(__dirname, 'node_modules/react')
+        }*/
     },
 
     plugins: [
-        new webpack.optimize.OccurenceOrderPlugin(),
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
-        }),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoErrorsPlugin(),
         function () {
             this.plugin("done", function (stats) {
                 stats = stats.toJson();

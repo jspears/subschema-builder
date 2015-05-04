@@ -8,7 +8,7 @@ var schema = {
 
         "object": {
             "type": "Object",
-            help: 'Shows an object',
+            "help": 'Shows an object',
             "subSchema": {
                 name: {
                     type: 'Text'
@@ -24,13 +24,14 @@ var schema = {
 
 };
 var vm = ValueManager(schema);
-function clear(){
+function clear() {
     vm.setValue({});
 }
-React.render(
-    <App valueManager={vm}>
-        <div>
-            <button className="btn" onClick={clear}>clear</button>
-        </div>
-    </App>
+
+
+ React.render( <App valueManager={vm}>
+         <div>
+             <button className="btn" onClick={clear}>clear</button>
+         </div>
+     </App>
     , document.getElementById('content'));
