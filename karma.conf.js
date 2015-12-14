@@ -32,6 +32,10 @@ module.exports = function (config) {
                     {
                         test: /\.less$/,
                         loader: 'style!css!less-loader'
+                    },
+                    {
+                        test: /\.json$/,
+                        loader: 'json'
                     }
                 ]
             },
