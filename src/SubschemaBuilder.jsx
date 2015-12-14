@@ -7,9 +7,6 @@ var util = Subschema.util;
 var extend = util.extend;
 var virginValueType = extend({}, schema.schema.schema.valueType.subSchema);
 var virginFields = schema.schema.schema.valueType.fields.concat();
-var CreateItemMixin = require('subschema/src/types/CreateItemMixin');
-var BasicFieldMixin = require('subschema/src/BasicFieldMixin');
-var {Button,ModalTrigger,Modal} = require('react-bootstrap');
 var SelectOptions = {
     options: {
         type: 'List',
@@ -50,7 +47,7 @@ var SelectOptions = {
 var SubschemaBuilder = React.createClass({
     getInitialState(){
         return {
-            schema: schema
+            schema: this.props.schema || schema
         }
     },
     swapSchema(swapped){
@@ -66,6 +63,10 @@ var SubschemaBuilder = React.createClass({
     },
     componentWillMount(){
         this.props.valueManager.addCreateValueListener(this.props.path, this.register, this);
+        console.log('will mount', this.state);
+        if (this.props.type){
+            this.swapSchema(this.updateConfig(this.props.type));
+        }
     },
     componentWillUnmount(){
         this.props.valueManager.removeCreateValueListener(this.props.path, this.register);
@@ -76,6 +77,7 @@ var SubschemaBuilder = React.createClass({
         //    return false;
     },
     updateConfig(value){
+        console.log('config type', value);
         switch (value) {
             case 'Object':
             {
@@ -139,7 +141,7 @@ var SubschemaBuilder = React.createClass({
     }
 });
 
-var SubschemaBuilderModal = React.createClass({
+var SubschemaBuilderEmbed = React.createClass({
 
     handleAdd(e){
         e && e.preventDefault();
@@ -148,41 +150,31 @@ var SubschemaBuilderModal = React.createClass({
     },
     componentWillMount(){
         var value = this.props.valueManager.getValue()
-        value = value && value.subSchema;
-        this.valueManager = Subschema.ValueManager({schema: value});
+        var key = value.key;
+        var subSchema = (value && value.value || value || {}).subSchema;
+
+        if (!subSchema){
+            subSchema = {};
+            subSchema[value.type] = value;
+        }
+        this.valueManager = Subschema.ValueManager({schema: subSchema});
+        this.setState({
+            path:key,
+            type:value.type
+        });
+
     },
     updateValue(val){
         this.props.valueManager.update(this.props.path, val);
     },
     render(){
-        var {onRequestHide, ...props} = this.props;
-        return <Modal bsStyle='primary' title='Subschema Schema' animation={true}
-                      onRequestHide={this.props.onRequestHide}>
-            <div className='modal-body clearfix'>
-                <div className='flex-container'>
-                    <SubschemaBuilder {...props} valueManager={this.valueManager} className={'flex-container'}/>
-                </div>
-            </div>
-            <div className='modal-footer'>
-                <Button onClick={onRequestHide}>Close</Button>
-                <Button onClick={this.handleAdd}>Add</Button>
-            </div>
-        </Modal>
+        return <SubschemaBuilder {...this.props} path={this.state.path} type={this.state.type} valueManager={this.valueManager} className={'flex-container'}/>
+
     }
 });
-var SubschemaBuilderModalTrigger = React.createClass({
 
-    render () {
-        return <ModalTrigger modal={<SubschemaBuilderModal {...this.props}/>}>
-            <Button>Edit Schema</Button>
-        </ModalTrigger>
-    }
-
-})
 loader.addTemplate('EditorTemplateNested', require('./EditorTemplateNested.jsx'));
-loader.addType('SubschemaBuilder', SubschemaBuilderModalTrigger);
-loader.addType('OrType', require('./OrType.jsx'));
-loader.addTemplate('OrTypeTemplate', require('./template/OrTypeTemplate.jsx'));
-
+loader.addType('SubschemaBuilder', SubschemaBuilderEmbed);
+loader.addTemplate("CreateBuilderTemplate", require('./template/CreateBuilderTemplate.jsx'));
 module.exports = SubschemaBuilder;
 

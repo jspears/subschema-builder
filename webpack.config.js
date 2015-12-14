@@ -6,6 +6,9 @@ var AUTOPREFIXER_LOADER = 'autoprefixer-loader?{browsers:[' +
     '"Android 2.3", "Android >= 4", "Chrome >= 20", "Firefox >= 24", ' +
     '"Explorer >= 8", "iOS >= 6", "Opera >= 12", "Safari >= 6"]}';
 var port = 8083;
+function relTo() {
+    return path.join.apply(path, [__dirname].concat(Array.prototype.slice.call(arguments)));
+}
 module.exports = {
 
     devtool: 'eval',
@@ -14,16 +17,16 @@ module.exports = {
     entry: [
         'webpack-dev-server/client?http://localhost:' + port,
         'webpack/hot/only-dev-server',
-        path.join(__dirname, 'public/app.jsx')
+        relTo('public/app.jsx')
     ],
     devServer: {
         port: port,
-        contentBase: path.join(__dirname, 'public'),
+        contentBase: relTo('public'),
         hot: true,
         inline: true
     },
     output: {
-        path: path.join(__dirname, '.build'),
+        path: relTo('.build'),
         filename: 'bundle.js',
         publicPath: 'http://localhost:' + port + '/build/'
 
@@ -37,16 +40,21 @@ module.exports = {
             {
                 test: /\.js(x)?$/,
                 loaders: ['react-hot', 'babel?stage=0'],
-                includes:[
-                    path.join(__dirname, 'public'),
-                    path.join(__dirname, 'src')
+                include: [
+                    relTo('public'),
+                    relTo('src')
                 ],
-                exclude:/node_modules/
+                exclude: /node_modules/
             },
             {
-                test:/\.js(x)?$/,
-                loaders:['babel?stage=0'],
-                exclude: /node_modules\/(?!subschema|react-bootstrap|react-router)/
+                test: /\.js(x)?$/,
+                loaders: ['babel?stage=0'],
+                //prevent the things from being imported.  Necessary for the magic to work.
+                exclude: [
+                    /node_modules\/(?!subschema|react-bootstrap|react-router)/,
+                    relTo('public'),
+                    relTo('src')
+                ]
             },
             {test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000'},
             {test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/font-woff"},
@@ -67,10 +75,7 @@ module.exports = {
     },
 
     resolve: {
-        extensions: ['', '.js', '.jsx', '.less']/*,
-        alias: {
-            react: path.join(__dirname, 'node_modules/react')
-        }*/
+        extensions: ['', '.js', '.jsx', '.less']
     },
 
     plugins: [

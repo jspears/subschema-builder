@@ -69,10 +69,9 @@ var schema = {
 
 module.exports = {
     schema: {
-
-        schema: {
+       schema: {
             type: 'Mixed',
-            help: 'Make some schema magic',
+            createTemplate:"CreateBuilderTemplate",
             canEdit: true,
             canDelete: true,
             canReorder: true,

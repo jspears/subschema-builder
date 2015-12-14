@@ -1,7 +1,8 @@
 "use strict";
 
 var React = require('react');
-var {TabbedArea,TabPane} = require('react-bootstrap');
+var TabbedArea = require('react-bootstrap/lib/TabbedArea');
+var TabPane = require('react-bootstrap/lib/TabPane');
 var SimpleTabs = React.createClass({
     getDefaultProps(){
         return {
