@@ -14,6 +14,8 @@ var schema = {
         },
         schema: {
             type: 'Mixed',
+            addButton: {label: 'Add Property', className: "btn btn-default add-btn"},
+
             template: false,
             labelKey: 'type',
             valueType: {

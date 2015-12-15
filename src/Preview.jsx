@@ -1,10 +1,15 @@
 "use strict";
 import React, {Component} from 'react';
 import Subschema, {Form, decorators} from 'Subschema';
-import PreviewSchema from './PreviewSchema.jsx';
-import SchemaView from './SchemaView.jsx'
+
 var {listen} = decorators;
 
+class JsonView extends Component {
+
+    render() {
+        return <pre>{JSON.stringify(this.props.schema, null, 3)}</pre>
+    }
+}
 export default class Preview extends Component {
     handleClick = (e)=> {
         e && e.preventDefault();
@@ -20,8 +25,27 @@ export default class Preview extends Component {
         }
     }
 
+    @listen("value", "fieldsets")
+    setFieldsets(fieldsets) {
+        this.makeSchema();
+    }
+
+    @listen("value", "schema")
+    setSchema(schema) {
+        this.makeSchema();
+    }
+
+    makeSchema() {
+        var value = this.context.valueManager.getValue();
+        var {fieldsets, schema} = value;
+
+        this.setState({schema: {fieldsets, schema}});
+        console.log('schema', this.state.schema);
+    }
+
     render() {
-        return <div className="nav-preview">
+        return <fieldset className="subschema-preview nav-preview">
+            <legend>Preview</legend>
             <ul id="myTabs" className="nav nav-tabs" role="tablist">
                 <li role="presentation" className={this.state.current !== 'json' ? 'active' :''}>
                     <button value="form" role="tab" id="profile-tab" data-toggle="tab" onClick={this.handleClick}
@@ -36,12 +60,14 @@ export default class Preview extends Component {
             </ul>
             <div id="myTabContent" className="tab-content">
                 <div role="tabpanel" className="tab-pane fade active in" id="home" aria-labelledby="home-tab">
-                    {this.state.current === 'json' ? <SchemaView key="json"/> : <PreviewSchema key="schema"/>}
+                    {this.state.current === 'json' ? <JsonView key="json" schema={this.state.schema}/> : <Form
+                        schema={this.state.schema}
+                        key="schema"/>}
 
                 </div>
 
             </div>
 
-        </div>
+        </fieldset>
     }
 }

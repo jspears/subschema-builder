@@ -3,7 +3,6 @@ import Subschema, {loaderFactory, DefaultLoader, tutils, PropTypes} from 'Subsch
 import BuilderLoader from './loader';
 import SchemaBuilderLess from './SchemaBuilder.less';
 import SchemaBuilderType from './SchemaBuilderType.jsx';
-import SchemaView from './SchemaView.jsx';
 import normalizeSchema, {normalizeFieldsets} from './normalize';
 import Preview from './Preview.jsx';
 import FieldSetBuilder from './FieldSetBuilder.jsx';
@@ -62,11 +61,10 @@ export default class SchemaBuilder extends Component {
     render() {
         var {valueManager, loader, ...rest} = this.props;
         return <SchemaBuilderContext valueManager={this.valueManager} loader={loader}>
-            <div>
+            <div className="subschema-builder">
                 <SchemaBuilderType {...rest}/>
                 <FieldSetBuilder/>
                 <Preview/>
-                <SchemaView/>
             </div>
         </SchemaBuilderContext>
     }
