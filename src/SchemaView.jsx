@@ -9,11 +9,11 @@ export default class SchemaView extends Component {
     setSchema(schema) {
         var {_templates,_types, _processors, _validators, _allFields, _operators, ...rest } = schema;
         this.setState({schema: rest});
+        this.forceUpdate();
     }
     handleClick = (e)=>{
         e && e.preventDefault();
         this.setSchema(this.context.valueManager.getValue());
-        this.forceUpdate();
     }
     render() {
         return <pre onClick={this.handleClick}>{JSON.stringify(this.state.schema, null, 3)}</pre>
