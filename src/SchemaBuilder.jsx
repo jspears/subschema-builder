@@ -1,17 +1,14 @@
 import React, {Component} from 'react';
-import Subschema, {PropTypes, loaderFactory, tutils, types,decorators, DefaultLoader} from 'Subschema';
+import Subschema, {loaderFactory, DefaultLoader, tutils, PropTypes} from 'Subschema';
 import BuilderLoader from './loader';
 import SchemaBuilderLess from './SchemaBuilder.less';
 import SchemaBuilderType from './SchemaBuilderType.jsx';
 import SchemaView from './SchemaView.jsx';
 import normalizeSchema, {normalizeFieldsets} from './normalize';
 import Preview from './Preview.jsx';
+import FieldSetBuilder from './FieldSetBuilder.jsx';
 
-var ObjectType = types.Object;
-//ObjectType.normalizeSchema =normalizeSchema;
-//ObjectType.normalizeFieldsets=normalizeFieldsets;
 var {FREEZE_OBJ} = tutils;
-
 var builderLoader = loaderFactory([DefaultLoader, BuilderLoader]);
 var toName = (v)=>v.name;
 
@@ -67,6 +64,7 @@ export default class SchemaBuilder extends Component {
         return <SchemaBuilderContext valueManager={this.valueManager} loader={loader}>
             <div>
                 <SchemaBuilderType {...rest}/>
+                <FieldSetBuilder/>
                 <Preview/>
                 <SchemaView/>
             </div>

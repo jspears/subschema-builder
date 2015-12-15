@@ -1,18 +1,20 @@
 "use strict";
 
 import React, {Component} from 'react';
-import subschema, {loaderFactory, DefaultLoader, types, PropTypes, ValueManager} from 'subschema';
+import subschema, {loaderFactory, DefaultLoader, decorators, types, PropTypes, ValueManager} from 'subschema';
 var ObjectType = types.Object;
+var {listen} =decorators;
 
 function makeSchema(loader) {
     var FieldSetSchema = {
         legend: {
-            type: 'Text',
+            type: 'InputFalse',
             help: 'The legend for this fieldset'
         },
         template: {
-            type: 'SelectDefault',
+            type: 'ExpressionSelect',
             optionsPath: "_templates",
+            defaultValue:'FieldSetTemplate',
             help: 'Override the default template'
         },
         className: {
@@ -33,18 +35,25 @@ function makeSchema(loader) {
             }
         }
     };
-    /*
-     FieldSetSchema.fieldsets = {
-     type: 'List',
-     itemType: {
-     type: 'Object',
-     subSchema: FieldSetSchema
-     }
-     };*/
 
     return {
-        schema: FieldSetSchema,
-        fields: ['legend', 'template', 'className', 'fields']
+        schema: {
+            fieldsets: {
+                type: 'List',
+                labelKey: 'legend',
+                canEdit: true,
+                canReorder: true,
+                canDelete: true,
+                canAdd: true,
+                itemType: {
+                    type: 'Object',
+                    subSchema: FieldSetSchema
+                },
+                contentTemplate: 'ContentTypeTemplate',
+                createTemplate: 'ModalCreateTemplate'
+            }
+        },
+        fieldsets: [{fields: 'fieldsets'}]
     };
 }
 export default class FieldSetBuilder extends Component {
@@ -53,14 +62,17 @@ export default class FieldSetBuilder extends Component {
         path: PropTypes.path
     }
 
-    constructor(props, context, ...rest) {
-        super(props, context, ...rest);
-        this.schema = makeSchema(context.loader);
-//        context.loader.addSchema('FieldSetSchema', makeSchema(context.loader));
+    @listen("value", "schema")
+    setSchema(schema) {
+        var fields = Object.keys(schema);
+        this.setState({schema, fields});
+        this.context.valueManager.update('_allFields', fields);
+        this.schema = makeSchema(this.context.loader);
     }
 
     render() {
-        return <ObjectType schema={this.schema} path={this.props.path}/>
+        var {schema, ...props} = this.props;
+        return <ObjectType {...props} schema={this.schema}/>
 
     }
 }

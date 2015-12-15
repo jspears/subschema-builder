@@ -14,7 +14,8 @@ var valueManager = ValueManager({
         title: {
             type: 'Select',
             help: 'Select Text',
-            options: [{label: 'Mr.', val: 'Mr'}, {label: 'Mrs.', val: 'Ms'}, {label: 'Ms.', val: 'Ms'}]
+            options: [{label: 'Mr.', val: 'Mr'}, {label: 'Mrs.', val: 'Ms'}, {label: 'Ms.', val: 'Ms'}],
+            validators:'required'
         },
         address: {
             type: 'Object',

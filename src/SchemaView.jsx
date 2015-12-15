@@ -5,11 +5,9 @@ import Subschema, {decorators} from 'Subschema';
 var {listen} = decorators;
 
 export default class SchemaView extends Component {
-    @listen("value", null)
+    @listen("value", "schema")
     setSchema(schema) {
-        var {_templates,_types, _processors, _validators, _allFields, _operators, ...rest } = schema;
-        this.setState({schema: rest});
-        this.forceUpdate();
+        this.setState({schema});
     }
     handleClick = (e)=>{
         e && e.preventDefault();
