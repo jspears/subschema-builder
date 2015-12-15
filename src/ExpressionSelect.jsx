@@ -29,7 +29,8 @@ export default class ExpressionSelect extends Component {
 
     //allows for injection of the Select types.
     static propTypes = defaults({
-        optionsPath: PropTypes.string
+        optionsPath: PropTypes.string,
+        defaultValue: PropTypes.string
     }, Select.propTypes);
 
     constructor(...props) {
@@ -53,9 +54,20 @@ export default class ExpressionSelect extends Component {
         })
     }
 
+    //default values should not be populated.
+    handleChange = (e)=> {
+        if (e === this.props.defaultValue) {
+            this.props.onChange(void(0));
+        } else {
+            this.props.onChange(e);
+        }
+
+    }
     //inline styles, because this is an example
     render() {
-        var {options, ...props} = this.props;
-        return <Select {...props} options={this.state.options || options}/>
+        var {options,value, onChange, defaultValue, ...props} = this.props;
+
+        return <Select {...props} onChange={this.handleChange} value={value == null ? defaultValue : value}
+                                  options={this.state.options || options}/>
     }
 }

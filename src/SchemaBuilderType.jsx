@@ -1,7 +1,9 @@
 "use strict";
 
 import React, {Component} from 'react';
-import Subschema, {PropTypes, loaderFactory, types,decorators, DefaultLoader} from 'Subschema';
+import Subschema, {PropTypes, loaderFactory, ValueManager, types,decorators, DefaultLoader} from 'Subschema';
+import defaults from 'lodash/object/defaults';
+var {listen} = decorators;
 
 var ObjectType = types.Object;
 
@@ -9,7 +11,8 @@ var schema = {
     schema: {
         schema: {
             type: 'Mixed',
-            labelKey: 'help',
+            template:false,
+            labelKey: 'type',
             valueType: {
                 type: 'TypeBuilder'
             },
@@ -17,47 +20,64 @@ var schema = {
             canAdd: true,
             canEdit: true,
             canRemove: true
-        },
-        fieldsets: {
-            type: 'List',
-            canAdd: true,
-            canEdit: true,
-            canRemove: true,
-            canReorder: true,
-            itemType: {
-                type: 'Object',
-                subSchema: {
-                    legend: 'Text',
-                    fields: {
-                        type: 'List',
-                        canAdd: true,
-                        canEdit: true,
-                        canRemove: true,
-                        canReorder: true,
-                        itemType: {
-                            type: 'ExpressionSelect',
-                            options: '_allFields'
-                        }
-                    }
-                },
-                fields: ['legend', 'fields']
-            }
         }
     },
-    fieldsets: [{
-        legend: 'Schema Builder', fields: ['schema', //'fieldsets'
-        ]
-    }]
+    fields: ['schema']
+}, subSchema = {
+    schema: {
+        subSchema: {
+            type: 'Mixed',
+            title: 'SubSchema',
+            labelKey: 'type',
+            valueType: {
+                type: 'TypeBuilder'
+            },
+            createTemplate: 'ModalCreateTemplate',
+            canAdd: true,
+            canEdit: true,
+            canRemove: true
+        }
+    },
+    fields: ['subSchema']
 };
+;
 
 
 export default class SchemaBuilderType extends Component {
     static contextTypes = ObjectType.contextTypes;
-    static propTypes = ObjectType.propTypes;
+    static propTypes = defaults({nested: PropTypes.bool}, ObjectType.propTypes);
+    static childContextTypes = ObjectType.contextTypes;
+
+    getChildContext() {
+        if (!this.props.nested) {
+            return this.context;
+        }
+        var {loader, valueManager}  = this.context;
+        var {...value} = valueManager.path(this.props.path);
+        var newValue = {
+            subSchema: value
+        }
+        var newValueManager = ValueManager(valueManager.getValue());
+        newValueManager.update(this.props.path, newValue);
+        var remove = newValueManager.addListener(this.props.path,  (value)=> {
+            console.log('what? ', value);
+            var {...copy} = value.subSchema;
+            setTimeout(()=>{
+            valueManager.update(this.props.path,  copy);
+            remove && remove.remove();
+            }, 100);
+        }, this, false);
+        return {loader, valueManager: newValueManager};
+    }
+
+    handleSubmit = (e)=> {
+        console.log('what?', e)
+    }
 
     render() {
-        var {valueManager, loader, ...rest} = this.props;
-        return <ObjectType {...rest} schema={schema}/>
+        var {valueManager,className, nested, loader, ...rest} = this.props;
+        return <ObjectType {...rest} className='form-group' schema={nested ? subSchema : schema}
+                                     onSubmit={this.handleSubmit}/>
 
     }
 }

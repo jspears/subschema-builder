@@ -7,7 +7,7 @@ var {listen} = decorators;
 var {each, FREEZE_OBJ} = tutils;
 var ObjectType = types.Object;
 
-function makeSchema(loader, type) {
+function makeSchema(loader, type, key) {
     var fields = ['type', 'title', 'placeholder', 'className'];
     var schema = {
         fieldsets: [
@@ -45,6 +45,7 @@ function makeSchema(loader, type) {
             },
             title: {
                 type: 'InputFalse',
+                defaultValue: tutils.titlelize(toPath(key)),
                 help: 'The text in the label to use (unchecking will use no title)'
             },
             placeholder: {
@@ -119,7 +120,7 @@ function makeSchema(loader, type) {
     var Type = loader.loadType(type);
     var defProps = Type.defaultProps || FREEZE_OBJ;
     each(Type.propTypes, (propType, key)=> {
-        if (Editor.fieldPropTypes[key] || propType === PropTypes.value || propType === PropTypes.valueEvent || propType === PropTypes.targetEvent) {
+        if (key == 'schema' || Editor.fieldPropTypes[key] || propType === PropTypes.value || propType === PropTypes.valueEvent || propType === PropTypes.targetEvent) {
             return
         }
         var type = toType(type, propType, defProps[key]);
@@ -141,9 +142,12 @@ ignorePropTypes.push.apply(ignorePropTypes, ignorePropTypes.map(v=>v.isRequired)
 
 function toType(type, propType, defaultValue) {
     if (ignorePropTypes.indexOf(propType) > -1) return;
-    if (type == 'Object'){
+    if (propType === PropTypes.schema) {
         return {
-
+            type: 'SchemaBuilder',
+            fieldClass: 'form-group',
+            nested: true,
+            template: false
         }
     }
     if (propType === PropTypes.options) {
@@ -183,6 +187,7 @@ function toType(type, propType, defaultValue) {
         return {
             type: 'ExpressionSelect',
             help: 'Processor',
+            defaultValue,
             optionsPath: '_processors'
         }
     }
@@ -190,6 +195,7 @@ function toType(type, propType, defaultValue) {
         return {
             type: 'ExpressionSelect',
             help: 'Template',
+            defaultValue,
             optionsPath: '_templates'
         }
     }
@@ -202,6 +208,7 @@ function toType(type, propType, defaultValue) {
     if (propType === PropTypes.type) {
         return {
             type: 'ExpressionSelect',
+            defaultValue,
             optionsPath: '_types'
         }
     }
@@ -225,6 +232,9 @@ function toType(type, propType, defaultValue) {
     }
 }
 
+function toPath(path) {
+    return path.replace(/.*@(.+?)\.value$/, '$1');
+}
 
 export default class TypeBuilder extends Component {
     static propTypes = {
@@ -239,7 +249,7 @@ export default class TypeBuilder extends Component {
 
     @listen('value', '.type', true)
     typeChange(type) {
-        this.schema = makeSchema(this.context.loader, type || 'Text');
+        this.schema = makeSchema(this.context.loader, type || 'Text', this.props.path);
         console.log('typeChange', JSON.stringify(this.schema, null, 2));
         this.forceUpdate();
     }
