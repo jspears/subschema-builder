@@ -10,7 +10,6 @@ import InputFalse from './InputFalse.jsx';
 import ToggleTemplate from './ToggleTemplate.jsx';
 import ExpressionSelect from './ExpressionSelect.jsx';
 import ModalCreateTemplate from './ModalCreateTemplate.jsx';
-import LabelValue from './LabelValue.jsx';
 import SchemaBuilder from './SchemaBuilderType.jsx';
 import ContentTypeTemplate from './ContentTypeTemplate.jsx';
 
@@ -29,7 +28,6 @@ loader.addValidator({
 });
 
 loader.addTemplate({
-    LabelValue,
     ToggleTemplate,
     ModalCreateTemplate,
     ContentTypeTemplate

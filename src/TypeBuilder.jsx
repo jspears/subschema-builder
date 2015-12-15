@@ -101,7 +101,7 @@ function makeSchema(loader, type, key) {
                 canDelete: true,
                 canEdit: true,
                 canReorder: true,
-                labelKey: "label",
+                labelKey: "type",
                 itemType: {
                     type: 'Object',
                     subSchema: {

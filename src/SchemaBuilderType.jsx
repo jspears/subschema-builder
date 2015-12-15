@@ -36,8 +36,7 @@ export default class SchemaBuilderType extends Component {
     render() {
         var {valueManager,className, nested, loader, ...rest} = this.props;
 
-        return <ObjectType {...rest} className='form-group' schema={schema}
-        />
+        return <ObjectType {...rest} className='form-group' schema={schema}/>
 
     }
 }
