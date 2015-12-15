@@ -6,7 +6,7 @@ var mstyles = styles.ModalTemplate;
 var { ButtonsTemplate} = templates;
 var {listen} = decorators;
 
-class ModalTemplate extends Component {
+export default class ModalTemplate extends Component {
     static propTypes = {
         onCommit: PropTypes.event
 

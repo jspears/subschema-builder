@@ -5,6 +5,7 @@ import SchemaBuilderLess from './SchemaBuilder.less';
 import SchemaBuilderType from './SchemaBuilderType.jsx';
 import SchemaView from './SchemaView.jsx';
 import normalizeSchema, {normalizeFieldsets} from './normalize';
+import Preview from './Preview.jsx';
 
 var ObjectType = types.Object;
 //ObjectType.normalizeSchema =normalizeSchema;
@@ -66,6 +67,7 @@ export default class SchemaBuilder extends Component {
         return <SchemaBuilderContext valueManager={this.valueManager} loader={loader}>
             <div>
                 <SchemaBuilderType {...rest}/>
+                <Preview/>
                 <SchemaView/>
             </div>
         </SchemaBuilderContext>
