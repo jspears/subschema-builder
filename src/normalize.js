@@ -4,12 +4,12 @@ import each from 'lodash/collection/each';
 
 var {toArray, isString} = tutils;
 
-function normalizeFieldset(fieldset) {
+export function normalizeFieldsets(fieldset) {
     var {fields, fieldsets, ...rest} = fieldset;
     if (fields != null) {
         rest.fields = toArray(fields);
     } else if (fieldsets != null) {
-        rest.fieldsets = toArray(fieldsets).map(normalizeFieldset);
+        rest.fieldsets = toArray(fieldsets).map(normalizeFieldsets);
     }
     return rest;
 }
@@ -53,7 +53,7 @@ function normalizeField(loader, field) {
 
     if (subSchema != null) {
         if (fieldsets != null) {
-            fieldsets = toArray(fieldsets).map(normalizeFieldset);
+            fieldsets = toArray(fieldsets).map(normalizeFieldsets);
             subSchema = {
                 schema:subSchema,
                 fieldsets
@@ -65,14 +65,14 @@ function normalizeField(loader, field) {
                 fieldsets
             }
         }
-        copy.subSchema = normalize(loader, subSchema).subSchema;
+        copy.subSchema = normalizeSchema(loader, subSchema).subSchema;
     }
 
     return copy;
 }
-export default function normalize(loader, oschema) {
+export default function normalizeSchema(loader, oschema) {
     if (isString(oschema)) {
-        return normalize(loader, {subSchema: loader.loadSchema(oschema)});
+        return normalizeSchema(loader, {subSchema: loader.loadSchema(oschema)});
     }
     var {subSchema, schema, fields, fieldsets, ...copy} =  oschema;
     schema = subSchema || schema;
@@ -80,7 +80,7 @@ export default function normalize(loader, oschema) {
         copy.subSchema = loader.loadSchema(schema);
         copy.fields = fields;
         copy.fieldsets = fieldsets;
-        return normalize(loader, copy);
+        return normalizeSchema(loader, copy);
     }
     if (schema) {
         if (fields) {
@@ -91,7 +91,7 @@ export default function normalize(loader, oschema) {
         } else if (fieldsets) {
             copy.subSchema = {
                 schema,
-                fieldsets: toArray(fieldsets).map(normalizeFieldset)
+                fieldsets: toArray(fieldsets).map(normalizeFieldsets)
             }
         } else {
             copy.subSchema = {
@@ -105,7 +105,7 @@ export default function normalize(loader, oschema) {
 
     } else {
         //if no fields or fieldsets, we assume the whole thing is the schema.
-        return normalize(loader, {subSchema: oschema});
+        return normalizeSchema(loader, {subSchema: oschema});
     }
     return copy;
 }

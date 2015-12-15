@@ -12,6 +12,7 @@ import ExpressionSelect from './ExpressionSelect.jsx';
 import ModalCreateTemplate from './ModalCreateTemplate.jsx';
 import LabelValue from './LabelValue.jsx';
 import SchemaBuilder from './SchemaBuilderType.jsx';
+import ContentTypeTemplate from './ContentTypeTemplate.jsx';
 
 var loader = loaderFactory([DefaultLoader]);
 loader.addType({
@@ -30,7 +31,8 @@ loader.addValidator({
 loader.addTemplate({
     LabelValue,
     ToggleTemplate,
-    ModalCreateTemplate
+    ModalCreateTemplate,
+    ContentTypeTemplate
 })
 
 export default loader;

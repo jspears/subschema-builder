@@ -103,7 +103,7 @@ describe('normalize', function () {
                 }
             }
         });
-        console.log(JSON.stringify(normal, null, 3) + '');
+     //   console.log(JSON.stringify(normal, null, 3) + '');
         expect(normal).toEqual({
                 "subSchema": {
                     "fieldsets": [{"fields": ["type"]}],

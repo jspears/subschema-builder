@@ -1,9 +1,15 @@
 import React, {Component} from 'react';
-import Subschema, {PropTypes, loaderFactory, types,decorators, DefaultLoader} from 'Subschema';
+import Subschema, {PropTypes, loaderFactory, tutils, types,decorators, DefaultLoader} from 'Subschema';
 import BuilderLoader from './loader';
 import SchemaBuilderLess from './SchemaBuilder.less';
 import SchemaBuilderType from './SchemaBuilderType.jsx';
 import SchemaView from './SchemaView.jsx';
+import normalizeSchema, {normalizeFieldsets} from './normalize';
+
+var ObjectType = types.Object;
+//ObjectType.normalizeSchema =normalizeSchema;
+//ObjectType.normalizeFieldsets=normalizeFieldsets;
+var {FREEZE_OBJ} = tutils;
 
 var builderLoader = loaderFactory([DefaultLoader, BuilderLoader]);
 var toName = (v)=>v.name;
@@ -37,9 +43,27 @@ export default class SchemaBuilder extends Component {
         valueManager: PropTypes.valueManager
     }
 
+    componentWillMount() {
+        this.setup(this.props, FREEZE_OBJ);
+    }
+
+    componentWillReceiveProps(props) {
+        this.setup(props, this.props);
+    }
+
+    setup(props, oldProps) {
+        if (props.value !== oldProps.value) {
+            var schema = normalizeSchema(props.loader, props.value);
+            this.valueManager = ValueManager(schema.subSchema);
+        } else if (!oldProps.valueManager || oldProps.valueManager && oldProps.valueManager.value !== props.valueManager.value) {
+            this.valueManager = props.valueManager;
+            this.valueManager.setValue(normalizeSchema(props.loader, props.valueManager.value).subSchema);
+        }
+    }
+
     render() {
         var {valueManager, loader, ...rest} = this.props;
-        return <SchemaBuilderContext valueManager={valueManager} loader={loader}>
+        return <SchemaBuilderContext valueManager={this.valueManager} loader={loader}>
             <div>
                 <SchemaBuilderType {...rest}/>
                 <SchemaView/>
