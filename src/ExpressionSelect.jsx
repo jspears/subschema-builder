@@ -66,8 +66,8 @@ export default class ExpressionSelect extends Component {
     //inline styles, because this is an example
     render() {
         var {options,value, onChange, defaultValue, ...props} = this.props;
-
-        return <Select {...props} onChange={this.handleChange} value={value == null ? defaultValue : value}
+        value = value == null ? defaultValue : value;
+        return <Select {...props} onChange={this.handleChange} defaultValue={value}
                                   options={this.state.options || options}/>
     }
 }

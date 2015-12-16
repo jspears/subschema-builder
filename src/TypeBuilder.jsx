@@ -142,12 +142,26 @@ ignorePropTypes.push.apply(ignorePropTypes, ignorePropTypes.map(v=>v.isRequired)
 
 function toType(type, propType, defaultValue) {
     if (ignorePropTypes.indexOf(propType) > -1) return;
+    if (propType === PropTypes.type) {
+        return {
+            type: 'TypeBuilder',
+            fieldClass: 'form-group',
+            template: false
+        }
+    }
     if (propType === PropTypes.schema) {
         return {
-            type: 'SchemaBuilder',
+            type: 'Object',
+            subSchema: {
+                schema: {
+                    schema: {
+                        type: 'SchemaBuilder'
+                    }
+                }
+            },
             fieldClass: 'form-group',
-            nested: true,
             template: false
+
         }
     }
     if (propType === PropTypes.options) {
@@ -250,11 +264,12 @@ export default class TypeBuilder extends Component {
     @listen('value', '.type', true)
     typeChange(type) {
         this.schema = makeSchema(this.context.loader, type || 'Text', this.props.path);
-        //console.log('typeChange', JSON.stringify(this.schema, null, 2));
+
         this.forceUpdate();
     }
 
     render() {
+        console.log('typeChange', JSON.stringify(this.schema, null, 2), '\n\nvalue\n\n', JSON.stringify(this.props.value, null, 2));
         return <ObjectType {...this.props} schema={this.schema}/>
     }
 }

@@ -54,10 +54,6 @@ var fieldsets = {
     contentTemplate: 'ContentTypeTemplate',
     createTemplate: 'ModalCreateTemplate'
 }
-FieldSetSchema.fieldsets = {
-    type: 'FieldSetBuilder',
-    template: false
-};
 
 function allFields(oschema, ppath, fields) {
     fields = fields || [];
@@ -97,22 +93,16 @@ export default class FieldSetBuilder extends List {
     static inputClassName = ' ';
     static template = false;
     static noTemplate = true;
-
+    static propTypes = List.propTypes;
+    static defaultProps = defaults(fieldsets, List.defaultProps);
 
     @listen("value", ".schema")
     setSchema(schema) {
         var fields = schema ? Object.keys(schema) : [];
-
         this.setState({schema, fields});
         var _all = allFields({schema});
         console.log('_all', _all);
-        this.context.valueManager.update('__allFields', _all);
-        this.schema = makeSchema(this.context.loader);
-    }
-
-    @listen("value", "__allFields")
-    toFields(all) {
-        this.context.valueManager.update('_allFields', toFields(this.state && this.state.schema || null, all));
+        this.context.valueManager.update('_allFields', toFields(this.state && this.state.schema || null, _all));
     }
 
 }

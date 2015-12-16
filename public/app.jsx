@@ -100,7 +100,8 @@ class OrigLoaderContext extends Component {
                     label: t.name,
                     val: t.name
                 }
-            })
+            }),
+            'schemaName': 'SampleSchema'
 
         });
 
