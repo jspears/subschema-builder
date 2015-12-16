@@ -44,10 +44,10 @@ export default class ToggleTemplate extends Component {
             return null;
         }
         if (buttons.buttons) {
-            return <ButtonsTemplate ref="buttons" onButtonClick={this.props.onButtonClick} onClick={this.props.onClick}
+            return <ButtonsTemplate onButtonClick={this.props.onButtonClick} onClick={this.props.onClick}
                 {...buttons}/>
         }
-        return <ButtonsTemplate ref="buttons" onButtonClick={this.props.onButtonClick} onClick={this.props.onClick}
+        return <ButtonsTemplate onButtonClick={this.props.onButtonClick} onClick={this.props.onClick}
                                 buttons={buttons}/>
     }
 

@@ -14,6 +14,7 @@ import SchemaBuilder from './SchemaBuilder.jsx';
 import ContentTypeTemplate from './ContentTypeTemplate.jsx';
 import Preview from './Preview.jsx';
 import SchemaBuilderContext from './SchemaBuilderContext.jsx';
+import Fields from './FieldsType.jsx';
 
 var loader = loaderFactory([DefaultLoader]);
 loader.addType({
@@ -24,7 +25,8 @@ loader.addType({
     ExpressionSelect,
     SchemaBuilder,
     Preview,
-    SchemaBuilderContext
+    SchemaBuilderContext,
+    Fields
 });
 
 loader.addValidator({

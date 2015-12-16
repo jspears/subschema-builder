@@ -2,7 +2,7 @@
 
 import React, {Component} from 'react';
 import Subschema, {loaderFactory, DefaultLoader, decorators, tutils, types, PropTypes, ValueManager} from 'Subschema';
-import defaults from 'lodash/object/defaults'
+import defaults from 'lodash/object/defaultsDeep'
 var ObjectType = types.Object;
 var {List} = types;
 var {listen} =decorators;
@@ -25,17 +25,8 @@ var FieldSetSchema = {
         help: 'Class name for this fieldset'
     },
     fields: {
-        type: 'List',
-        help: 'Fields included in this fieldset',
-        addButton: {label: 'Add Field', className: "btn btn-default add-btn"},
-        canAdd: true,
-        canEdit: true,
-        canDelete: true,
-        canReorder: true,
-        itemType: {
-            type: 'ExpressionSelect',
-            optionsPath: '_allFields'
-        }
+        type: 'Fields',
+        help: 'Fields included in this fieldset'
     }
 };
 
@@ -49,7 +40,9 @@ var fieldsets = {
     addButton: {label: 'Add Fieldset', className: "btn btn-default add-btn"},
     itemType: {
         type: 'Object',
-        subSchema: FieldSetSchema
+        subSchema: {
+            schema: FieldSetSchema
+        }
     },
     contentTemplate: 'ContentTypeTemplate',
     createTemplate: 'ModalCreateTemplate'
@@ -90,11 +83,11 @@ function toFields(schema, _all) {
 }
 export default class FieldSetBuilder extends List {
 
-    static inputClassName = ' ';
     static template = false;
     static noTemplate = true;
     static propTypes = List.propTypes;
     static defaultProps = defaults(fieldsets, List.defaultProps);
+
 
     @listen("value", ".schema")
     setSchema(schema) {
