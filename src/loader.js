@@ -10,8 +10,10 @@ import InputFalse from './InputFalse.jsx';
 import ToggleTemplate from './ToggleTemplate.jsx';
 import ExpressionSelect from './ExpressionSelect.jsx';
 import ModalCreateTemplate from './ModalCreateTemplate.jsx';
-import SchemaBuilder from './SchemaBuilderType.jsx';
+import SchemaBuilder from './SchemaBuilder.jsx';
 import ContentTypeTemplate from './ContentTypeTemplate.jsx';
+import Preview from './Preview.jsx';
+import SchemaBuilderContext from './SchemaBuilderContext.jsx';
 
 var loader = loaderFactory([DefaultLoader]);
 loader.addType({
@@ -20,7 +22,9 @@ loader.addType({
     SelectDefault,
     InputFalse,
     ExpressionSelect,
-    SchemaBuilder
+    SchemaBuilder,
+    Preview,
+    SchemaBuilderContext
 });
 
 loader.addValidator({

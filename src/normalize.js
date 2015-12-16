@@ -55,13 +55,13 @@ function normalizeField(loader, field) {
         if (fieldsets != null) {
             fieldsets = toArray(fieldsets).map(normalizeFieldsets);
             subSchema = {
-                schema:subSchema,
+                schema: subSchema,
                 fieldsets
             }
         } else if (fields != null) {
             fieldsets = [{fields: toArray(fields)}];
             subSchema = {
-                schema:subSchema,
+                schema: subSchema,
                 fieldsets
             }
         }
@@ -71,6 +71,9 @@ function normalizeField(loader, field) {
     return copy;
 }
 export default function normalizeSchema(loader, oschema) {
+    if (oschema == null) {
+        return {};
+    }
     if (isString(oschema)) {
         return normalizeSchema(loader, {subSchema: loader.loadSchema(oschema)});
     }

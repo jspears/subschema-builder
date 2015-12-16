@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import ButtonsTemplate from 'subschema/templates/ButtonsTemplate.jsx';
-import PropTypes from  'subschema/PropTypes';
-import {noop} from 'subschema/tutils';
-import Checkbox from 'subschema/types/Checkbox';
+import Subschema, {PropTypes, templates,  tutils, types} from 'Subschema';
+
+var {Checkbox} = types;
+var {ButtonsTemplate} = templates;
+var {noop} = tutils;
 
 export default class ToggleTemplate extends Component {
     static propTypes = {

@@ -9,7 +9,8 @@
     "karma": "karma start --no-single-run --colors --auto-watch",
     "docs": "node bin/docs.js",
     "webpack": "webpack --config webpack.config.js -p",
-    "hot": "webpack-dev-server --config ./hot.webpack.config.js"
+    "hot": "webpack-dev-server --config ./hot.webpack.config.js",
+    "demo":"webpack --config ./demo.webpack.config.js"
   },
   "keywords": [
     "react",

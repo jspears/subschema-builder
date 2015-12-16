@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import subschema, {loaderFactory,types, tutils, decorators, PropTypes, DefaultLoader, ValueManager} from 'subschema';
+import subschema, {loaderFactory,types, tutils, decorators, PropTypes, DefaultLoader, ValueManager} from 'Subschema';
 import defaults from 'lodash/object/defaults';
 var {isString, toArray} = tutils;
 var {Select, Checkbox} = types;

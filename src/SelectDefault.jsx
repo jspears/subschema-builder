@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import subschema, {loaderFactory,types, DefaultLoader, ValueManager} from 'subschema';
+import subschema, {loaderFactory,types, DefaultLoader, ValueManager} from 'Subschema';
 import ExpressionSelect from './ExpressionSelect.jsx';
 var {Checkbox} = types;
 

@@ -1,7 +1,7 @@
 "use strict";
 
 import React, {Component} from 'react';
-import Subschema, {loaderFactory, tutils, decorators, types, DefaultLoader, Editor, PropTypes, ValueManager} from 'subschema/index.jsx';
+import Subschema, {loaderFactory, tutils, decorators, types, DefaultLoader, Editor, PropTypes, ValueManager} from 'Subschema';
 
 var {listen} = decorators;
 var {each, FREEZE_OBJ} = tutils;
@@ -250,7 +250,7 @@ export default class TypeBuilder extends Component {
     @listen('value', '.type', true)
     typeChange(type) {
         this.schema = makeSchema(this.context.loader, type || 'Text', this.props.path);
-        console.log('typeChange', JSON.stringify(this.schema, null, 2));
+        //console.log('typeChange', JSON.stringify(this.schema, null, 2));
         this.forceUpdate();
     }
 

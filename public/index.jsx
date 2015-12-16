@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import Subschema, {Form, loader, loaderFactory, DefaultLoader, ValueManager} from 'subschema/index.jsx';
-import SchemaBuilder from '../src/SchemaBuilder.jsx';
-var valueManager = ValueManager({
+import Subschema, {Form, loader, loaderFactory, DefaultLoader, ValueManager} from 'Subschema';
+import App from './app.jsx';
+var sampleSchema = {
     schema: {
         name: {
             type: 'Text',
@@ -15,7 +15,7 @@ var valueManager = ValueManager({
             type: 'Select',
             help: 'Select Text',
             options: [{label: 'Mr.', val: 'Mr'}, {label: 'Mrs.', val: 'Ms'}, {label: 'Ms.', val: 'Ms'}],
-            validators:'required'
+            validators: 'required'
         },
         address: {
             type: 'Object',
@@ -34,13 +34,9 @@ var valueManager = ValueManager({
         legend: 'Mr So and So',
         fields: ['name', 'title']
     }]
-});
+}
 
-valueManager.addListener('schema', function (val, old, path) {
-    console.log('value changed', val, path);
-    if (val != null) {
-        valueManager.update('_allFields', Object.keys(val));
-    }
-}, null, true);
+loader.addSchema('SampleSchema', sampleSchema);
 
-ReactDOM.render(<SchemaBuilder loader={loader} valueManager={valueManager}/>, document.getElementById('content'));
+ReactDOM.render(<div><h1>SchemaBuilder Demo</h1><App loader={loader}/>
+</div>, document.getElementById('content'));

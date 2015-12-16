@@ -1,16 +1,24 @@
 "use strict";
 import React, {Component} from 'react';
-import Subschema, {Form, decorators} from 'Subschema';
+import Subschema, {PropTypes, Form, decorators} from 'Subschema';
 
 var {listen} = decorators;
 
 class JsonView extends Component {
 
     render() {
-        return <pre>{JSON.stringify(this.props.schema, null, 3)}</pre>
+        return <pre>{JSON.stringify(this.props.schema, null, 3)+''}</pre>
     }
 }
 export default class Preview extends Component {
+    static defaultProps = {
+        fieldsets: "fieldsets",
+        schema: "schema"
+    }
+    static propTypes = {
+        fieldsets: PropTypes.listener,
+        schema: PropTypes.listener
+    }
     handleClick = (e)=> {
         e && e.preventDefault();
         this.setState({
@@ -25,25 +33,14 @@ export default class Preview extends Component {
         }
     }
 
-    @listen("value", "fieldsets")
-    setFieldsets(fieldsets) {
-        this.makeSchema();
-    }
-
-    @listen("value", "schema")
-    setSchema(schema) {
-        this.makeSchema();
-    }
-
     makeSchema() {
-        var value = this.context.valueManager.getValue();
-        var {fieldsets, schema} = value;
+        var {fieldsets, schema} = this.props;
 
-        this.setState({schema: {fieldsets, schema}});
-        console.log('schema', this.state.schema);
+        return {fieldsets, schema};
     }
 
     render() {
+        var schema = this.makeSchema();
         return <fieldset className="subschema-preview nav-preview">
             <legend>Preview</legend>
             <ul id="myTabs" className="nav nav-tabs" role="tablist">
@@ -60,8 +57,8 @@ export default class Preview extends Component {
             </ul>
             <div id="myTabContent" className="tab-content">
                 <div role="tabpanel" className="tab-pane fade active in" id="home" aria-labelledby="home-tab">
-                    {this.state.current === 'json' ? <JsonView key="json" schema={this.state.schema}/> : <Form
-                        schema={this.state.schema}
+                    {this.state.current === 'json' ? <JsonView key="json" schema={schema}/> : <Form
+                        schema={schema}
                         key="schema"/>}
 
                 </div>

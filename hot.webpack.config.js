@@ -88,9 +88,8 @@ module.exports = {
         require('postcss-color-rebeccapurple')
     ],
     resolve: {
-        extensions: ['', '.js', '.jsx'],
+        extensions: ['', '.jsx', '.js'],
         alias: {
-            'subschema': join('node_modules/subschema/src'),
             'subschema-styles': join('node_modules/subschema/src/styles'),
             'Subschema': join('node_modules/subschema/src'),
             'react': join('node_modules/react')
