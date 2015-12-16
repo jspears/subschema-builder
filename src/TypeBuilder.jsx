@@ -8,12 +8,15 @@ var {each, FREEZE_OBJ} = tutils;
 var ObjectType = types.Object;
 
 function makeSchema(loader, type, key) {
-    var fields = ['type', 'title', 'placeholder', 'className'];
+    var fields = ['title', 'placeholder', 'className'];
     var schema = {
         fieldsets: [
             {
                 className: 'max-height',
                 fieldsets: [
+                    {
+                        fields: ['type']
+                    },
                     {
                         legend: 'Type',
                         template: 'ToggleTemplate',
@@ -41,7 +44,9 @@ function makeSchema(loader, type, key) {
                 type: 'ExpressionSelect',
                 help: 'The type of the component',
                 placeholder: 'Text',
-                optionsPath: '_types'
+                optionsPath: '_types',
+                emptyIfDefault: false,
+                defaultValue: 'Text'
             },
             title: {
                 type: 'InputFalse',

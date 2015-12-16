@@ -9,15 +9,17 @@ export default class InputFalse extends Component {
     //allows for injection of the Select types.
     static propTypes = defaults({
         onChange: PropTypes.valueEvent,
-        defaultValue: PropTypes.string
+        defaultValue: PropTypes.string,
+        emptyIfDefault: PropTypes.bool
     }, Text.propTypes);
+
 
     handleChange = (checked)=> {
         this.props.onChange(!checked ? false : this.lastValue);
 
     }
     handleText = (e)=> {
-        if (this.props.defaultValue === e.target.value) {
+        if (this.props.emptyIfDefault && this.props.defaultValue === e.target.value) {
             this.props.onChange(void(0));
         } else {
             this.lastValue = e.target.value;

@@ -15,6 +15,7 @@ import ContentTypeTemplate from './ContentTypeTemplate.jsx';
 import Preview from './Preview.jsx';
 import SchemaBuilderContext from './SchemaBuilderContext.jsx';
 import Fields from './FieldsType.jsx';
+import SchemaSelect from './SchemaSelect.jsx';
 
 var loader = loaderFactory([DefaultLoader]);
 loader.addType({
@@ -26,7 +27,8 @@ loader.addType({
     SchemaBuilder,
     Preview,
     SchemaBuilderContext,
-    Fields
+    Fields,
+    SchemaSelect
 });
 
 loader.addValidator({
@@ -35,6 +37,7 @@ loader.addValidator({
 
 loader.addTemplate({
     ToggleTemplate,
+    SchemaBuilderContext,
     ModalCreateTemplate,
     ContentTypeTemplate
 })

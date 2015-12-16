@@ -46,12 +46,12 @@ export default class Preview extends Component {
             <ul id="myTabs" className="nav nav-tabs" role="tablist">
                 <li role="presentation" className={this.state.current !== 'json' ? 'active' :''}>
                     <button value="form" role="tab" id="profile-tab" data-toggle="tab" onClick={this.handleClick}
-                            aria-controls="profile" aria-expanded="false">Schema
+                            aria-controls="profile" aria-expanded="false">Form
                     </button>
                 </li>
                 <li role="presentation" className={this.state.current === 'json' ? 'active' :''}>
                     <button value="json" id="home-tab" role="tab" data-toggle="tab" onClick={this.handleClick}
-                            aria-controls="schema" aria-expanded="true">JSON
+                            aria-controls="schema" aria-expanded="true">Schema
                     </button>
                 </li>
             </ul>

@@ -30,12 +30,27 @@ export default class ExpressionSelect extends Component {
     //allows for injection of the Select types.
     static propTypes = defaults({
         optionsPath: PropTypes.string,
-        defaultValue: PropTypes.string
+        defaultValue: PropTypes.string,
+        emptyIfDefault: PropTypes.bool
     }, Select.propTypes);
 
     constructor(...props) {
         super(...props);
         this.state || (this.state = {});
+    }
+
+    componentWillMount() {
+        this.setup(this.props);
+    }
+
+    componentWillRecieveProps(props) {
+        this.setup(props);
+    }
+
+    setup(props) {
+        if (props.emptyIfDefault === false && props.value == null) {
+            props.onChange(this.props.defaultValue);
+        }
     }
 
     @listeners("value", true)
