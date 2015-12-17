@@ -1,5 +1,6 @@
 "use strict";
-import Subschema, {tutils} from 'Subschema';
+
+import {tutils} from 'Subschema';
 import each from 'lodash/collection/each';
 
 var {toArray, isString} = tutils;

@@ -45,8 +45,8 @@ function makeSchema(loader, type, key) {
                 help: 'The type of the component',
                 placeholder: 'Text',
                 optionsPath: '_types',
-                emptyIfDefault: false,
-                defaultValue: 'Text'
+//                emptyIfDefault: false,
+//                defaultValue: 'Text'
             },
             title: {
                 type: 'InputFalse',
@@ -145,9 +145,19 @@ var ignorePropTypes = [
 ];
 ignorePropTypes.push.apply(ignorePropTypes, ignorePropTypes.map(v=>v.isRequired));
 
+function isPropType(target, type) {
+    return (type === target || type.isRequired === target);
+}
 function toType(type, propType, defaultValue) {
     if (ignorePropTypes.indexOf(propType) > -1) return;
-    if (propType === PropTypes.type) {
+    if (isPropType(propType,PropTypes.type)) {
+        return {
+            type: "ExpressionSelect",
+            defaultValue,
+            optionsPath: "_types"
+        }
+    }
+    if (propType === PropTypes.typeDescription) {
         return {
             type: 'TypeBuilder',
             fieldClass: 'form-group',

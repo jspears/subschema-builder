@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import subschema, {loaderFactory,types, tutils, decorators, PropTypes, DefaultLoader, ValueManager} from 'Subschema';
-import defaults from 'lodash/object/defaults';
+import defaults from '../../node_modules/lodash/object/defaults';
 var {isString, toArray} = tutils;
 var {Select, Checkbox} = types;
 var {listeners} = decorators;
@@ -43,7 +43,7 @@ export default class ExpressionSelect extends Component {
         this.setup(this.props);
     }
 
-    componentWillRecieveProps(props) {
+    componentWillReceiveProps(props) {
         this.setup(props);
     }
 

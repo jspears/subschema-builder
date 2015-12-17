@@ -2,7 +2,7 @@
 
 import React, {Component} from 'react';
 import Subschema, {PropTypes,  loaderFactory, ValueManager, types,decorators, DefaultLoader} from 'Subschema';
-import defaults from 'lodash/object/defaultsDeep';
+import defaults from '../../node_modules/lodash/object/defaultsDeep';
 
 var {Mixed} = types;
 export default class SchemaBuilder extends Mixed {
@@ -12,6 +12,11 @@ export default class SchemaBuilder extends Mixed {
         labelKey: 'type',
         itemType: {
             type: 'TypeBuilder'
+        },
+        defaultValue: {
+            type: {
+                type: 'TextArea'
+            }
         },
         contentTemplate: 'ContentTypeTemplate',
         createTemplate: 'ModalCreateTemplate',

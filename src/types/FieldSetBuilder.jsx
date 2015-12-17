@@ -2,7 +2,7 @@
 
 import React, {Component} from 'react';
 import Subschema, {loaderFactory, DefaultLoader, decorators, tutils, types, PropTypes, ValueManager} from 'Subschema';
-import defaults from 'lodash/object/defaultsDeep'
+import defaults from '../../node_modules/lodash/object/defaultsDeep'
 var ObjectType = types.Object;
 var {List} = types;
 var {listen} =decorators;

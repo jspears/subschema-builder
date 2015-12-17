@@ -2,7 +2,7 @@
 
 import builderLoader from '../src/loader';
 import expect from 'expect';
-import SchemaBuilder from '../src/SchemaBuilder.jsx';
+import SchemaBuilder from '../src/types/SchemaBuilder.jsx';
 describe('loader', function () {
     it('should load SchemaBuilder', function () {
         var sb = builderLoader.loadType("SchemaBuilder");

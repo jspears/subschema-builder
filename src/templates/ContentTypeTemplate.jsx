@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 
 import Subschema, {templates} from 'Subschema';
-import map from 'lodash/collection/map';
+import map from '../../node_modules/lodash/collection/map';
 
 var {ContentItemTemplate} = templates;
 

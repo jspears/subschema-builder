@@ -1,8 +1,6 @@
 "use strict";
 import React, {Component} from 'react';
-import Subschema, {decorators,types,Form, PropTypes,DefaultLoader, ValueManager, loaderFactory} from 'Subschema';
-import SchemaBuilder from '../src/SchemaBuilder.jsx';
-import ExpressionSelect from '../src/ExpressionSelect.jsx';
+import  {decorators,types,Form, PropTypes,DefaultLoader, ValueManager, loaderFactory} from 'Subschema';
 import defaults from 'lodash/object/defaults';
 import SchemaBuilderContext from '../src/SchemaBuilderContext.jsx';
 import normalizeSchema from '../src/normalize';
@@ -47,11 +45,11 @@ var schemaBuilder = {
 };
 
 
-
 export default class App extends Component {
     static propTypes = {
         loader: PropTypes.loader.isRequired
     }
+
     render() {
         return <SchemaBuilderContext loader={this.props.loader} builderLoader={builderLoader}>
             <ObjectType schema={schemaBuilder} objectTemplate="WizardTemplate"/>

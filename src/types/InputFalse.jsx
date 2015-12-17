@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import subschema, {loaderFactory,types,PropTypes, DefaultLoader, ValueManager} from 'Subschema';
-import defaults from 'lodash/object/defaults';
+import defaults from '../../node_modules/lodash/object/defaults';
 
 var {Checkbox, Text} = types;
 

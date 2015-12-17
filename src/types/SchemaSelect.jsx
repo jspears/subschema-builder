@@ -1,8 +1,8 @@
 "use strict";
 import React, {Component} from 'react';
 import Subschema, {decorators,types,Form, PropTypes,DefaultLoader, ValueManager, loaderFactory} from 'Subschema';
-import defaults from 'lodash/object/defaults';
-import normalizeSchema from '../src/normalize';
+import defaults from '../../node_modules/lodash/object/defaults';
+import normalizeSchema from '../normalize';
 
 var {listen} = decorators;
 

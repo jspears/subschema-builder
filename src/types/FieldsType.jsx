@@ -2,7 +2,7 @@
 
 import React, {Component} from 'react';
 import Subschema, {types, PropTypes,tutils, decorators} from 'Subschema';
-import defaults from 'lodash/object/defaultsDeep';
+import defaults from '../../node_modules/lodash/object/defaultsDeep';
 var {List} = types;
 
 export default class Fields extends List {

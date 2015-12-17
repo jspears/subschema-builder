@@ -1,5 +1,5 @@
-var webpack = require('webpack'), path = require('path');
-
+var webpack = require('webpack'), path = require('path'), demo = require('./demo.webpack.config');
+demo.module.loaders[0].include.push(path.join(__dirname, 'test'));
 module.exports = function (config) {
     config.set({
         browserNoActivityTimeout: 20000,
@@ -14,43 +14,7 @@ module.exports = function (config) {
         },
         reporters: ['dots'], //report results in this format
 
-        webpack: { //kind of a copy of your webpack config
-            cache: true,
-            debug: true,
-            devtool: 'inline-source-map',
-
-            stats: {
-                colors: true,
-                reasons: true
-            },
-            module: {
-                loaders: [
-                    {
-                        test: /\.js(x)?$/,
-                        loader: 'babel-loader?stage=0'
-                    },
-                    {
-                        test: /\.less$/,
-                        loader: 'style!css!less-loader'
-                    },
-                    {
-                        test: /\.json$/,
-                        loader: 'json'
-                    }
-                ]
-            },
-
-            plugins: [
-                new webpack.DefinePlugin({
-                    'process.env.NODE_ENV': JSON.stringify('development')
-                })]
-
-        },
-        webpackMiddleware: {
-            stats: {
-                colors: true
-            }
-        }
+        webpack: demo
     });
+}
 
-};

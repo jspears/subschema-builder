@@ -6,7 +6,7 @@ var AUTOPREFIXER_LOADER = 'autoprefixer-loader?{browsers:[' +
     '"Android 2.3", "Android >= 4", "Chrome >= 20", "Firefox >= 24", ' +
     '"Explorer >= 8", "iOS >= 6", "Opera >= 12", "Safari >= 6"]}';
 var port = 8083;
-var join = path.join.bind(path, __dirname), relTo = join;
+var join = path.join.bind(path, __dirname);
 
 module.exports = {
 
@@ -14,10 +14,10 @@ module.exports = {
 
 
     entry: [
-        relTo('public/index.jsx')
+        join('public/index.jsx')
     ],
     output: {
-        path: relTo('.build'),
+        path: join('.build'),
         filename: 'app.[hash].js'
     },
     module: {
@@ -26,8 +26,9 @@ module.exports = {
                 test: /\.jsx?$/,
                 loaders: ['babel?stage=0'],
                 include: [
-                    relTo('public'),
-                    relTo('src'),
+                    join('public'),
+                    join('src'),
+
                     join('node_modules/subschema')
                 ], exclude: [
                 /node_modules\/(?!subschema|react-bootstrap|react-router)/
@@ -47,6 +48,10 @@ module.exports = {
             {
                 test: /\.less$/,
                 loader: 'style!css!less-loader'
+            },
+            {
+                test: /\.json/,
+                loader: 'json'
             }
         ]
     },

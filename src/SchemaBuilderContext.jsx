@@ -2,8 +2,8 @@
 import React, {Component} from 'react';
 import Subschema, {PropTypes, types, loaderFactory, DefaultLoader, ValueManager} from 'Subschema';
 import normalizeSchema from './normalize';
-import SchemaBuilder from './SchemaBuilder.jsx';
-import SchemaBuilderLess from './SchemaBuilder.less';
+import SchemaBuilder from './types/SchemaBuilder.jsx';
+import SchemaBuilderLess from './types/SchemaBuilder.less';
 import builderLoader from '../src/loader';
 var toName = (v)=> {
     return {label: v.name, val: v.name}
